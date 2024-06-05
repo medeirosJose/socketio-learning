@@ -76,16 +76,19 @@
 
         var socket = io.connect();
 
+        // quando o mouse é pressionado
         canvas.onmousedown = function (e) {
           drawing = true;
           prevX = x;
           prevY = y;
         };
 
+        // quando o mouse é solto
         canvas.onmouseup = function (e) {
           drawing = false;
         };
 
+        // quando o mouse se move
         canvas.onmousemove = function (e) {
           x = e.clientX;
           y = e.clientY;
@@ -97,12 +100,14 @@
               y2: y,
             });
 
+            // desenha a linha propriamente
             drawLine(context, prevX, prevY, x, y);
             prevX = x;
             prevY = y;
           }
         };
 
+        // ouvindo o evento draw
         socket.on("draw", function (data) {
           drawLine(context, data.x1, data.y1, data.x2, data.y2);
         });

@@ -108,13 +108,16 @@
     <!-- id dos usuarios -->
     <div id="usuarios-logados"></div>
 
+    <!-- mensagens -->
     <div id="mensagens"></div>
 
+    <!-- input de envio de mensagem -->
     <form id="formulario">
       <input type="text" id="mensagem" placeholder="Digite sua mensagem" />
       <button type="submit">Enviar</button>
     </form>
 
+    <!-- script que precisa ter no html do socket.io -->
     <script src="/socket.io/socket.io.js"></script>
     <script>
       const contadorUsuarios = document.getElementById("contador-usuarios");
