@@ -1,0 +1,174 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Chat Fake - Socket.IO</title>
+    <style>
+      body {
+        font-family: Arial, sans-serif;
+        margin: 0;
+        padding: 0;
+        background-color: #f4f4f4;
+      }
+
+      h1 {
+        text-align: center;
+        margin-top: 20px;
+        color: #333;
+      }
+
+      #contador-usuarios {
+        position: fixed;
+        left: 10px;
+        top: 20px;
+        background-color: #fff;
+        padding: 5px 10px;
+        border-radius: 5px;
+        box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+      }
+
+      #usuarios-logados {
+        position: fixed;
+        left: 10px;
+        top: 50px;
+        background-color: #fff;
+        padding: 10px;
+        border-radius: 5px;
+        box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+      }
+
+      #mensagens {
+        border: 1px solid #ccc;
+        border-radius: 5px;
+        margin: 20px auto;
+        padding: 10px;
+        width: 80%;
+        max-width: 600px;
+        background-color: #fff;
+        box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+        overflow-y: scroll;
+        height: 300px;
+      }
+
+      #mensagens div {
+        margin-bottom: 10px;
+        padding: 5px 10px;
+        border-radius: 5px;
+        background-color: #f9f9f9;
+      }
+
+      #formulario {
+        margin: 0 auto;
+        width: 80%;
+        max-width: 600px;
+        display: flex;
+        align-items: center;
+      }
+
+      #mensagem {
+        flex: 1;
+        padding: 8px;
+        border-radius: 5px;
+        border: 1px solid #ccc;
+      }
+
+      .mensagem-enviada {
+        text-align: left;
+      }
+
+      .mensagem-recebida {
+        text-align: right;
+      }
+
+      button {
+        padding: 8px 15px;
+        margin-left: 10px;
+        border: none;
+        border-radius: 5px;
+        background-color: #82337e;
+        color: #fff;
+        cursor: pointer;
+      }
+
+      button:hover {
+        background-color: #6a2c6a;
+      }
+    </style>
+  </head>
+  <body>
+    <h1>🗣️Chat Fake</h1>
+    <div style="display: flex; justify-content: center">
+      <button id="voltar">Voltar</button>
+    </div>
+
+    <!-- contador de usuarios -->
+    <div id="contador-usuarios"></div>
+
+    <!-- id dos usuarios -->
+    <div id="usuarios-logados"></div>
+
+    <div id="mensagens"></div>
+
+    <form id="formulario">
+      <input type="text" id="mensagem" placeholder="Digite sua mensagem" />
+      <button type="submit">Enviar</button>
+    </form>
+
+    <script src="/socket.io/socket.io.js"></script>
+    <script>
+      const contadorUsuarios = document.getElementById("contador-usuarios");
+      const mensagens = document.getElementById("mensagens");
+      const usuariosLogados = document.getElementById("usuarios-logados");
+      const formulario = document.getElementById("formulario");
+      const mensagemInput = document.getElementById("mensagem");
+      const voltar = document.getElementById("voltar");
+      const socket = io();
+
+      // recebe do servidor a mensagem e o id do usuario
+      socket.on("chatMessage", ({ userId, message }) => {
+        const mensagemElemento = document.createElement("div");
+        mensagemElemento.innerHTML = `<strong>${userId.substring(
+          0,
+          6
+        )}</strong>: ${message}`;
+
+        // aqui faz de maneira bobinha a verificação de quem enviou a mensagem pra jogar pro lado direito ou esquerdo
+        if (userId === socket.id) {
+          mensagemElemento.classList.add("mensagem-enviada");
+        } else {
+          mensagemElemento.classList.add("mensagem-recebida");
+        }
+
+        mensagens.appendChild(mensagemElemento);
+        mensagens.scrollTop = mensagens.scrollHeight;
+      });
+
+      // recebe do servidor a quantidade de usuarios conectados
+      socket.on("usuariosConectados", (usuarios) => {
+        const numeroUsuarios = usuarios.length;
+        contadorUsuarios.textContent = `Users - ${numeroUsuarios}`;
+        usuariosLogados.innerHTML = "";
+        usuarios.forEach((usuario) => {
+          const usuarioElemento = document.createElement("div");
+          usuarioElemento.textContent = usuario;
+          usuariosLogados.appendChild(usuarioElemento);
+        });
+      });
+
+      // botao pra mandar pro index
+      voltar.addEventListener("click", () => {
+        window.location.href = "/";
+      });
+
+      // botao de envio do texto no chat
+      formulario.addEventListener("submit", (event) => {
+        event.preventDefault();
+        const mensagem = mensagemInput.value;
+        // envia pro servidor ouvindo em chatMessage, a mensagem
+        socket.emit("chatMessage", mensagem);
+        mensagemInput.value = "";
+      });
+    </script>
+  </body>
+</html>

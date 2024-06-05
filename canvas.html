@@ -1,0 +1,112 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    <style>
+      button {
+        padding: 8px 15px;
+        margin-left: 10px;
+        border: none;
+        border-radius: 5px;
+        background-color: #82337e;
+        color: #fff;
+        cursor: pointer;
+        margin-bottom: 20px;
+      }
+
+      button:hover {
+        background-color: #6a2c6a;
+      }
+
+      body {
+        font-family: Arial, sans-serif;
+        margin: 0;
+        padding: 0;
+        background-color: #f4f4f4;
+        text-align: center;
+      }
+
+      h1 {
+        text-align: center;
+        margin-top: 20px;
+      }
+
+      #canvas {
+        display: block;
+        margin: 0 auto;
+        box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+        border: 1px solid #ccc;
+        width: 90%;
+        height: 75vh;
+      }
+    </style>
+    <title>Canvas Desenho - Socket.IO</title>
+    <link rel="stylesheet" href="style.css" />
+    <script src="/socket.io/socket.io.js"></script>
+    <script src="script.js"></script>
+  </head>
+  <body>
+    <h1>🖼️ Desenhe! Seja feliz!</h1>
+    <div style="display: flex; justify-content: center">
+      <button id="voltar">Voltar</button>
+    </div>
+
+    <canvas id="canvas"></canvas>
+    <script>
+      voltar.addEventListener("click", () => {
+        window.location.href = "/";
+      });
+
+      function drawLine(context, x1, y1, x2, y2) {
+        context.moveTo(x1, y1);
+        context.lineTo(x2, y2);
+        context.stroke();
+      }
+
+      document.addEventListener("DOMContentLoaded", function () {
+        var canvas = document.getElementById("canvas");
+        var context = canvas.getContext("2d");
+        var width = window.innerWidth;
+        var height = window.innerHeight;
+
+        canvas.width = width;
+        canvas.height = height;
+
+        var drawing = false;
+        var x, y, prevX, prevY;
+
+        var socket = io.connect();
+
+        canvas.onmousedown = function (e) {
+          drawing = true;
+          prevX = x;
+          prevY = y;
+        };
+
+        canvas.onmouseup = function (e) {
+          drawing = false;
+        };
+
+        canvas.onmousemove = function (e) {
+          x = e.clientX;
+          y = e.clientY;
+          if (drawing) {
+            socket.emit("draw", {
+              x1: prevX,
+              y1: prevY,
+              x2: x,
+              y2: y,
+            });
+
+            drawLine(context, prevX, prevY, x, y);
+            prevX = x;
+            prevY = y;
+          }
+        };
+
+        socket.on("draw", function (data) {
+          drawLine(context, data.x1, data.y1, data.x2, data.y2);
+        });
+      });
+    </script>
+  </body>
+</html>

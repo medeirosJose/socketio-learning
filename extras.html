@@ -1,0 +1,152 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Extras</title>
+    <style>
+      body {
+        font-family: Arial, sans-serif;
+        margin: 20px;
+        padding: 0;
+        background-color: #f4f4f4;
+      }
+      h1 {
+        text-align: center;
+        margin-top: 40px;
+        color: #333;
+        margin-bottom: 20px;
+      }
+      ul {
+        list-style-type: none;
+        padding: 24px;
+        column-count: 3;
+        column-gap: 40px;
+      }
+      li {
+        margin-bottom: 20px;
+        padding: 12px;
+        background-color: rgb(241, 240, 240);
+      }
+      a {
+        text-decoration: none;
+        color: #82337e;
+        font-size: 1rem;
+      }
+      a:hover {
+        text-decoration: underline;
+      }
+
+      button {
+        padding: 8px 15px;
+        margin-left: 10px;
+        border: none;
+        border-radius: 5px;
+        background-color: #82337e;
+        color: #fff;
+        cursor: pointer;
+        box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+      }
+
+      button:hover {
+        background-color: #6a2c6a;
+      }
+
+      p {
+        color: #555;
+        padding: 4px;
+        margin: 0;
+        font-size: 0.8rem;
+        margin-top: 5px;
+        font-style: italic;
+      }
+
+      #voltar {
+        position: absolute;
+        top: 0;
+        left: 0;
+        margin: 10px;
+        background-color: #f9f9f9;
+        padding: 10px;
+        color: black;
+        border-radius: 5px;
+        box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+      }
+
+      #voltar:hover {
+        background-color: #f0f0f0;
+      }
+
+      #hr {
+        border: 0;
+        height: 0.5px;
+        background-image: linear-gradient(to right, #ccc, #6f6f6f, #ccc);
+        opacity: 0.5;
+        margin-left: 24px;
+        margin-right: 24px;
+        padding: 0;
+        width: 50%;
+        margin-left: auto;
+        margin-right: auto;
+      }
+    </style>
+  </head>
+  <body>
+    <h1>💡Links Úteis</h1>
+    <button id="voltar"><</button>
+    <hr id="hr" />
+    <ul>
+      <li>
+        <a href="https://socket.io/docs/v4/" target="_blank"
+          >- Documentação Socket.IO</a
+        >
+        <p>Documentação completa do Socket.IO</p>
+      </li>
+      <li>
+        <a href="https://socket.io/pt-br/get-started/chat" target="_blank"
+          >- Socket.IO - Get Started</a
+        >
+        <p>Tutorial básico do próprio Socket.IO para fazer um chat</p>
+      </li>
+      <li>
+        <a
+          href="https://codesandbox.io/p/devbox/github/socketio/chat-example?file=%2Findex.js"
+          target="_blank"
+          >- Chat Example - CodeSandbox</a
+        >
+        <p>Exemplo com SQLite e Persistência do Chat</p>
+      </li>
+      <li>
+        <a href="https://socket.io/pt-br/how-to/use-with-nextjs" target="_blank"
+          >- Socket.IO with Next.js</a
+        >
+        <p>Com Page Router e Apps Router</p>
+      </li>
+      <li>
+        <a
+          href="https://socket.io/pt-br/docs/v4/faq/#how-to-identify-a-given-user"
+          target="_blank"
+          >- Identificação de Usuários</a
+        >
+        <p>
+          Basicamente diz que cabe ao client fazer isso, mas sugere umas opções
+        </p>
+      </li>
+      <li>
+        <a href="https://socket.io/pt-br/how-to/use-with-react" target="_blank"
+          >- Socket.IO with React</a
+        >
+        <p>
+          Como usar o Socket.IO com React, com exemplos de uso de useEffect
+        </p>
+      </li>
+    </ul>
+
+    <script>
+      const voltar = document.getElementById("voltar");
+      voltar.addEventListener("click", () => {
+        window.location.href = "/";
+      });
+    </script>
+  </body>
+</html>

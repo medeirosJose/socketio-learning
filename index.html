@@ -1,0 +1,128 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Home - Exemplos de Socket.IO</title>
+    <style>
+      body {
+        font-family: Arial, sans-serif;
+        background-color: #f0f0f0;
+        margin: 0;
+        padding: 0;
+        text-align: center;
+      }
+
+      h1 {
+        color: #333;
+        text-align: center;
+        margin-top: 20px;
+      }
+
+      img {
+        width: 500px;
+        height: 450px;
+        display: block;
+        margin: 20px auto;
+        transition: transform 0.3s ease-in-out;
+      }
+
+      img:hover {
+        transform: scale(1.05);
+      }
+
+      button {
+        padding: 8px 15px;
+        margin-left: 10px;
+        border: none;
+        border-radius: 5px;
+        background-color: #82337e;
+        color: #fff;
+        cursor: pointer;
+        box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+      }
+
+      button:hover {
+        background-color: #6a2c6a;
+      }
+
+      #extras {
+        position: absolute;
+        top: 0;
+        right: 0;
+        margin: 10px;
+        background-color: #f9f9f9;
+        padding: 10px;
+        color: black;
+        border-radius: 5px;
+        box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+      }
+
+      #extras:hover {
+        background-color: #f0f0f0;
+      }
+    </style>
+  </head>
+  <body>
+    <h1>🤓 Socket.IO</h1>
+    <p>Users - <span id="contadorUsuarios">0</span></p>
+    <button id="extras">+</button>
+
+    <div>
+      <button id="buscarDog">🐕 Novo Dog</button>
+      <button id="buscarCat">🐈 Novo Cat</button>
+      <button id="chat">🗣️ Chat</button>
+      <button id="canvas">🖼️ Canvas</button>
+    </div>
+
+    <img id="imagemCachorro" src="" alt="" />
+
+    <script src="/socket.io/socket.io.js"></script>
+    <script>
+      const imagemCachorro = document.getElementById("imagemCachorro");
+      const botaoBuscarDog = document.getElementById("buscarDog");
+      const botaoChat = document.getElementById("chat");
+      const botaoEditor = document.getElementById("canvas");
+      const botaoBuscarCat = document.getElementById("buscarCat");
+      const contadorUsuarios = document.getElementById("contadorUsuarios");
+      const botaoExtras = document.getElementById("extras");
+      const socket = io();
+
+      socket.on("atualizarContador", (usuarios) => {
+        contadorUsuarios.textContent = usuarios;
+      });
+
+      socket.on("novaImagem", (imageUrl) => {
+        imagemCachorro.src = imageUrl;
+      });
+
+      botaoChat.addEventListener("click", () => {
+        window.location.href = "/chat";
+      });
+
+      botaoEditor.addEventListener("click", () => {
+        window.location.href = "/canvas";
+      });
+
+      botaoExtras.addEventListener("click", () => {
+        window.location.href = "/extras";
+      });
+
+      botaoBuscarCat.addEventListener("click", () => {
+        fetch("/buscarGato")
+          .then(() => console.log("Nova imagem buscada"))
+          .catch((error) =>
+            console.error("Erro ao buscar nova imagem:", error)
+          );
+      });
+
+      botaoBuscarDog.addEventListener("click", () => {
+        fetch("/buscarCachorro")
+          .then(() => console.log("Nova imagem buscada"))
+          .catch((error) =>
+            console.error("Erro ao buscar nova imagem:", error)
+          );
+      });
+    </script>
+  </body>
+</html>
